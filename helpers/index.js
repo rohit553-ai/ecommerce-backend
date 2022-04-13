@@ -1,3 +1,5 @@
-module.exports = {
-  tokenHelper: require("./tokenHelper")
-}
+module.exports = Object.assign(
+  {},
+  require("./errorHelper"),
+  require("./tokenHelper")
+)
