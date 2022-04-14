@@ -1,4 +1,5 @@
 const {Product, Category} = require("../models");
+const {Op} = require("sequelize")
 
 let productService = {};
 
@@ -11,7 +12,7 @@ productService.findAll = async(query)=>{
 productService.findOne = async(query)=>{
   return await Product.findOne({
     where: query,
-    attributes:["id", "name", "description", "picture", "quantity", "unitsSold", "price"],
+    attributes:["id", "name", "description", "picture", "quantity", "unitsSold", "price", "tag"],
     include:{
       model : Category,
       as: "category",
@@ -30,8 +31,34 @@ productService.delete = async(query)=>{
   });
 }
 
-productService.buildQuery = async(req)=>{
+productService.buildQuery = (req)=>{
   const query = req.query;
+  let filter = {};
+  if(query.category){
+    filter.categoryId = query.category;
+  }
+  if(query.minPrice){
+    filter.price = {
+      [Op.gte] : parseInt(query.minPrice.trim())
+    }
+  }
+  if(query.maxPrice){
+    filter.price = {
+      [Op.lte] : parseInt(query.maxPrice.trim())
+    }
+  }
+  if(query.minPrice && query.maxPrice){
+    filter.price = {
+      [Op.gte] : parseInt(query.minPrice.trim()),
+      [Op.lte] : parseInt(query.maxPrice.trim()),
+    }
+  }
+  if(query.name){
+    filter.name = {
+      [Op.like]: `%${query.name.trim()}%`
+    }
+  }
+  return filter;
 }
 
 module.exports = productService;

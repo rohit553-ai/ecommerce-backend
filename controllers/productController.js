@@ -4,7 +4,12 @@ const {CustomError} = require("../helpers")
 let productController = {};
 
 productController.getProducts = async(req, res, next)=>{
+  const filterQuery = productService.buildQuery(req);
 
+  console.log(filterQuery);
+
+  const data = await productService.findAll(filterQuery);
+  return res.status(200).json(data);
 }
 
 productController.getSingleProduct = async(req, res, next)=>{
