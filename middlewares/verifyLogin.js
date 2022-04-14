@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-const {User} = require("../services");
+const {userService} = require("../services");
 
-module.exports = async (req, res, next)=>{
+module.exports.verifyLogin = async (req, res, next)=>{
   let token;
   if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
     token = req.headers.authorization.split(" ")[1];
@@ -12,7 +12,7 @@ module.exports = async (req, res, next)=>{
   }
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET)
-  const freshUser = await User.findOne({id: decoded.userId});
+  const freshUser = await userService.findOne({id: decoded.userId});
   if(!freshUser){
     return res.send("test")
   }

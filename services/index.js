@@ -2,5 +2,7 @@ module.exports = {
   userService: require("./userService"),
   mailService: require("./mailService"),
   tokenService: require("./tokenService"),
-  categoryService: require("./categoryService")
+  categoryService: require("./categoryService"),
+  productService: require("./productService"),
+  wishListService: require("./wishListService")
 }

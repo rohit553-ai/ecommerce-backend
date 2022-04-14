@@ -27,7 +27,7 @@ app.use("*", (req, res, next)=>{
   return next(new CustomError(`${req.originalUrl} not found`, 404))
 })
 
-app.use(require("./middlewares/errorHandler"))
+app.use(require("./middlewares").errorHandler)
 
 app.listen(4000, ()=>{
   console.log("listening to port 4000")

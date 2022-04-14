@@ -1,6 +1,4 @@
-const res = require("express/lib/response");
-const {User} = require("../models");
-const user = require("../models/user");
+const {User, WishList, Product} = require("../models");
 
 let userService = {};
 
@@ -28,6 +26,26 @@ userService.update = async(data, query)=>{
     returning: true
   });
   return user;
+}
+
+userService.getWishList = async(id)=>{
+  const myWishList = await User.findOne({
+    where:{
+      id
+    },
+    attributes:["id", "firstName", "lastName", "email"],
+    include:{
+      model: WishList,
+      as: "wishLists",
+      attributes: ["id", "userId"],
+      include:{
+        model: Product,
+        as:"product",
+        attributes: ["id", "name", "price", "picture"]
+      }
+    }
+  })
+  return myWishList;
 }
 
 module.exports = userService;
