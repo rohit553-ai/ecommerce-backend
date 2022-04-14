@@ -4,5 +4,6 @@ module.exports = {
   tokenService: require("./tokenService"),
   categoryService: require("./categoryService"),
   productService: require("./productService"),
-  wishListService: require("./wishListService")
+  wishListService: require("./wishListService"),
+  reviewService: require("./reviewService")
 }

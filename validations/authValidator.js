@@ -24,17 +24,7 @@ let registerValidator = [
   check("password", "Invalid password")
   .isLength({min:1}).withMessage("Password is required")
   .isLength({max: 16}).withMessage("Password must not exceed 16 characters")
-  .isString().trim().escape(),
-  check("confirmPassword", "Invalid confrim password")
-  .isLength({min:1}).withMessage("Confirm password is required")
-  .isLength({max: 16}).withMessage("Password must not exceed 16 characters")
-  .isString().trim().escape().custom((value, {req})=>{
-    if(value!==req.body.password){
-      return Promise.reject("Confirm password and password doesn't match")
-    }else{
-      return Promise.resolve();
-    }
-  }),
+  .isString().trim().escape()
 ]
 
 module.exports = {loginValidator, registerValidator}
