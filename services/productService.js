@@ -5,7 +5,9 @@ let productService = {};
 
 productService.findAll = async(query)=>{
   return await Product.findAll({
-    where: query
+    where: query.where,
+    limit: query.limit,
+    offset: query.offset
   });
 }
 
@@ -59,6 +61,12 @@ productService.buildQuery = (req)=>{
     }
   }
   return filter;
+}
+
+productService.count = async(query)=>{
+  return await Product.count({
+    where: query
+  })
 }
 
 module.exports = productService;
