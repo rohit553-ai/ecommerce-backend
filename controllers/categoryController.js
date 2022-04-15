@@ -1,4 +1,6 @@
 const {categoryService} = require("../services");
+const {CustomError} = require("../helpers");
+const { Op } = require("sequelize");
 
 let categoryController = {};
 
@@ -12,7 +14,7 @@ categoryController.getSingleCategories = async(req, res, next)=>{
     id: req.params.id
   });
   if(!category){
-    return next(new Error("Soemthing went wrong"));
+    return next(new CustomError("Cant find category with given id", 404));
   }
 
   return res.status(200).json(category);
@@ -20,6 +22,13 @@ categoryController.getSingleCategories = async(req, res, next)=>{
 
 categoryController.postCategories = async(req, res, next)=>{
   const {name} =req.body;
+  const category = await categoryService.findOne({
+    name
+  })
+
+  if(category){
+    return next(new CustomError("Category name already in use", 400))
+  }
   const newCategory = await categoryService.add({name});
 
   return res.status(200).json(newCategory);
@@ -31,10 +40,20 @@ categoryController.updateCategory = async(req, res, next)=>{
   })
 
   if(!category){
-    return next(new Error("Soemthing went wrong"));
+    return next(new CustomError("Cant find category with given id", 404));
   }
 
   if(req.body.name){
+    const categoryInDB = await categoryService.findOne({
+      name: req.body.name,
+      id: {
+        [Op.ne]: category.id
+      }
+    })
+  
+    if(categoryInDB){
+      return next(new CustomError("Category name already in use", 400))
+    }
     category.name = req.body.name;
   }
   category = await category.save();
@@ -47,7 +66,7 @@ categoryController.deleteCategory = async(req, res, next)=>{
   })
 
   if(!category){
-    return next(new Error("Soemthing went wrong"));
+    return next(new CustomError("Cant find category with given id", 404));
   }
   await categoryService.delete({id: category.id});
   return res.status(200).json({

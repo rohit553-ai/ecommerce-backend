@@ -5,5 +5,6 @@ module.exports = {
   categoryService: require("./categoryService"),
   productService: require("./productService"),
   wishListService: require("./wishListService"),
+  subCategoryService: require("./subCategoryService")
   // reviewService: require("./reviewService")
 };

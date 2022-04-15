@@ -9,9 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({Category, WishList}) {
+    static associate({Category, WishList, SubCategory}) {
       // define association here
       this.belongsTo(Category, {foreignKey: "categoryId", as: "category"});
+      this.belongsTo(SubCategory, {foreignKey: "subCategoryId", as: "subCategory"});
       this.hasMany(WishList, {foreignKey: "productId", as:"wishLists"})
     }
   }
@@ -47,7 +48,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    tag: DataTypes.STRING
+    tag: DataTypes.STRING,
+    subCategoryId:{
+      type: DataTypes.INTEGER,
+      references:{
+        model:"SubCategory",
+        key:"id"
+      }
+    }
   }, {
     sequelize,
     modelName: 'Product',

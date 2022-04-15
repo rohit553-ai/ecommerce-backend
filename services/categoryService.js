@@ -1,9 +1,15 @@
-const {Category} = require("../models");
+const {Category, SubCategory} = require("../models");
 
 let categoryService = {};
 
 categoryService.findAll = async()=>{
-  return await Category.findAll();
+  return await Category.findAll({
+    include: {
+      model: SubCategory,
+      as: "subCategories",
+      attributes:["id", "name"]
+    }
+  });
 }
 
 categoryService.findOne = async(query)=>{

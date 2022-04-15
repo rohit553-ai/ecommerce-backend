@@ -1,4 +1,4 @@
-const {productService, categoryService} = require("../services");
+const {productService, categoryService, subCategoryService} = require("../services");
 const {CustomError} = require("../helpers")
 
 let productController = {};
@@ -47,16 +47,26 @@ productController.getSingleProduct = async(req, res, next)=>{
 
 productController.addNewProduct = async(req, res, next)=>{
   let category = await categoryService.findOne({id: req.body.categoryId});
+  let subCategory = await subCategoryService.findOne({
+    id: req.body.subCategoryId,
+    categoryId: req.body.categoryId
+  })
   if(!category){
     return next(new CustomError("Invalid category for prodcut", 400));
+  }
+
+  if(!subCategory){
+    return next(new CustomError("Invalid category or sub category for prodcut", 400));
   }
 
   let productData = {
     name: req.body.name,
     categoryId: req.body.categoryId,
+    subCategoryId: req.body.subCategoryId,
     description: req.body.description,
     quantity: req.body.quantity,
-    price: req.body.price
+    price: req.body.price,
+    tag: req.body.tag
   }
 
   const newProduct = await productService.add(productData);
