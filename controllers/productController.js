@@ -75,7 +75,7 @@ productController.addNewProduct = async(req, res, next)=>{
 };
 
 productController.updateProduct = async (req, res, next) => {
-  let { name, description, quantity, price } = req.body;
+  let { name, description, quantity, price, categoryId, subCategoryId, tag } = req.body;
 
   let product = await productService.findOne({
     id: req.params.id,
@@ -89,6 +89,30 @@ productController.updateProduct = async (req, res, next) => {
   description ? (product.description = description) : null;
   quantity ? (product.quantity = quantity) : null;
   price ? (product.price = price) : null;
+  tag ? product.tag = tag : null;
+
+  if(categoryId){
+    let category = await categoryService.findOne({id: categoryId});
+  
+    if(!category){
+      return next(new CustomError("Invalid category for prodcut", 400));
+    }
+    product.categoryId = categoryId
+  }
+
+  if(subCategoryId){
+    let query = {
+      id: subCategoryId
+    }
+    categoryId? query.categoryId = categoryId: query.categoryId = product.categoryId;
+    let subCategory = await subCategoryService.findOne(query)
+  
+    if(!subCategory){
+      return next(new CustomError("Invalid category or sub category for prodcut", 400));
+    }
+    product.subCategoryId = subCategoryId
+  }
+
 
   product = await product.save();
 

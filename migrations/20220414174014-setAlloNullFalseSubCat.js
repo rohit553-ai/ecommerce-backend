@@ -10,7 +10,6 @@ module.exports = {
      */
      await queryInterface.changeColumn("Products", "subCategoryId", {
       type: Sequelize.INTEGER,
-      allowNull: false,
       references:{
         model:"SubCategories",
         key:"id"

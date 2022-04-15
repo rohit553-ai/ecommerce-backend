@@ -6,6 +6,8 @@ const {wrapAsync} = require("../helpers")
 
 categoryRouter.get("/", wrapAsync(categoryController.getAllCategories));
 categoryRouter.get("/:id", wrapAsync(categoryController.getSingleCategories));
+categoryRouter.get("/:id/sub-categories", wrapAsync(categoryController.getSubCategories));
+
 categoryRouter.post("/", categoryValidator, checkErrors, wrapAsync(categoryController.postCategories));
 categoryRouter.patch("/:id", updateCategoryValidator, checkErrors, wrapAsync(categoryController.updateCategory));
 categoryRouter.delete("/:id", wrapAsync(categoryController.deleteCategory));

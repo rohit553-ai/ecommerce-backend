@@ -1,4 +1,4 @@
-const {categoryService} = require("../services");
+const {categoryService, subCategoryService} = require("../services");
 const {CustomError} = require("../helpers");
 const { Op } = require("sequelize");
 
@@ -74,5 +74,21 @@ categoryController.deleteCategory = async (req, res, next) => {
     data: null,
   });
 };
+
+categoryController.getSubCategories = async (req, res, next) => {
+  const category = await categoryService.findOne({
+    id: req.params.id,
+  });
+
+  if(!category){
+    return next(new CustomError("Cant find category with given id", 404));
+  }
+
+  const subCategories = await subCategoryService.findAll({
+    categoryId : category.id
+  });
+
+  return res.status(200).json(subCategories)
+}
 
 module.exports = categoryController;
