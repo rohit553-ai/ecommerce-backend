@@ -4,21 +4,21 @@ const { Op } = require("sequelize");
 
 let categoryController = {};
 
-categoryController.getAllCategories = async(req, res, next)=>{
+categoryController.getAllCategories = async (req, res, next) => {
   const categories = await categoryService.findAll();
   return res.status(200).json(categories);
-}
+};
 
-categoryController.getSingleCategories = async(req, res, next)=>{
+categoryController.getSingleCategories = async (req, res, next) => {
   const category = await categoryService.findOne({
-    id: req.params.id
+    id: req.params.id,
   });
   if(!category){
     return next(new CustomError("Cant find category with given id", 404));
   }
 
   return res.status(200).json(category);
-}
+};
 
 categoryController.postCategories = async(req, res, next)=>{
   const {name} =req.body;
@@ -32,12 +32,12 @@ categoryController.postCategories = async(req, res, next)=>{
   const newCategory = await categoryService.add({name});
 
   return res.status(200).json(newCategory);
-}
+};
 
-categoryController.updateCategory = async(req, res, next)=>{
+categoryController.updateCategory = async (req, res, next) => {
   let category = await categoryService.findOne({
-    id: req.params.id
-  })
+    id: req.params.id,
+  });
 
   if(!category){
     return next(new CustomError("Cant find category with given id", 404));
@@ -58,22 +58,21 @@ categoryController.updateCategory = async(req, res, next)=>{
   }
   category = await category.save();
   return res.status(200).json(category);
-}
+};
 
-categoryController.deleteCategory = async(req, res, next)=>{
+categoryController.deleteCategory = async (req, res, next) => {
   const category = await categoryService.findOne({
-    id: req.params.id
-  })
+    id: req.params.id,
+  });
 
   if(!category){
     return next(new CustomError("Cant find category with given id", 404));
   }
-  await categoryService.delete({id: category.id});
+  await categoryService.delete({ id: category.id });
   return res.status(200).json({
-    status:"success",
-    data: null
+    status: "success",
+    data: null,
   });
-}
+};
 
 module.exports = categoryController;
-
