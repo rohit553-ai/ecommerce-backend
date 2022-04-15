@@ -1,5 +1,7 @@
 const {productService, categoryService, subCategoryService} = require("../services");
-const {CustomError} = require("../helpers")
+const {CustomError} = require("../helpers");
+const fs = require("fs");
+const path = require("path");
 
 let productController = {};
 
@@ -46,6 +48,9 @@ productController.getSingleProduct = async (req, res, next) => {
 };
 
 productController.addNewProduct = async(req, res, next)=>{
+  if(!req.file){
+    return next(new CustomError("Picture is required", 404))
+  }
   let category = await categoryService.findOne({id: req.body.categoryId});
   
   if(!category){
@@ -59,7 +64,7 @@ productController.addNewProduct = async(req, res, next)=>{
   if(!subCategory){
     return next(new CustomError("Invalid category or sub category for prodcut", 400));
   }
-
+  console.log(req.file.path)
   let productData = {
     name: req.body.name,
     categoryId: req.body.categoryId,
@@ -67,7 +72,8 @@ productController.addNewProduct = async(req, res, next)=>{
     description: req.body.description,
     quantity: req.body.quantity,
     price: req.body.price,
-    tag: req.body.tag
+    tag: req.body.tag,
+    picture: req.file.path
   }
 
   const newProduct = await productService.add(productData);
@@ -90,7 +96,15 @@ productController.updateProduct = async (req, res, next) => {
   quantity ? (product.quantity = quantity) : null;
   price ? (product.price = price) : null;
   tag ? product.tag = tag : null;
-
+  if(req.file){
+    if(product.picture){
+      let imagePath = path.join(__dirname+"../../"+product.picture); 
+      if(fs.existsSync(imagePath)){
+        fs.unlinkSync(imagePath);
+      }
+    }
+    product.picture = req.file.path
+  }
   if(categoryId){
     let category = await categoryService.findOne({id: categoryId});
   

@@ -1,5 +1,7 @@
 const express = require("express");
-const cors = require("cors")
+const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 
@@ -22,6 +24,15 @@ const dbConnector = ()=>{
 }
 
 dbConnector();
+
+const prodImagePath = path.join(__dirname + "/uploads");
+
+if(!fs.existsSync(prodImagePath)){
+  fs.mkdirSync(prodImagePath);
+  console.log("created directory ", prodImagePath, " for images")
+}
+
+app.use("/uploads", express.static(prodImagePath))
 
 app.get("/", (req, res, next)=>{
   return res.status(200).json("Hello from FYP")
