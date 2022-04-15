@@ -8,6 +8,29 @@ userController.me = async(req, res, next)=>{
   return res.status(200).json(req.user);
 }
 
+userController.updateProfile = async(req, res, next)=>{
+  const user = req.user;
+  
+  const {firstName, lastName, phone} = req.body;
+
+  console.log(firstName, lastName, phone)
+  firstName? user.firstName = firstName: null;
+  lastName? user.lastName = lastName : null;
+
+  if(phone){
+    const userPhone = await userService.findOne({
+      phone
+    });
+    if(userPhone){
+      return next(new CustomError("The phone number is already in use", 400))
+    }
+    user.phone = phone;
+  }
+  req.user = await user.save();
+  console.log(req.user)
+  return res.status(200).json(req.user)
+}
+
 userController.addProductToWishList = async(req, res, next) => {
   const userId = req.user.id;
 

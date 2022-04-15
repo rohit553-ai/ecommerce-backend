@@ -7,7 +7,8 @@ productService.findAll = async(query)=>{
   return await Product.findAll({
     where: query.where,
     limit: query.limit,
-    offset: query.offset
+    offset: query.offset,
+    order: query.sort
   });
 }
 

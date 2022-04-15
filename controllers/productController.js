@@ -149,4 +149,11 @@ productController.deleteProduct = async (req, res, next) => {
   });
 };
 
+productController.latestProducts = async(req, res, next)=>{
+  const product = await productService.findAll({
+    limit: 5,
+    sort: [['createdAt', 'DESC']]
+  });
+  return res.status(200).json(product);
+}
 module.exports = productController;
