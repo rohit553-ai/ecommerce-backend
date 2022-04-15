@@ -4,11 +4,32 @@ const { CustomError } = require("../helpers");
 let productController = {};
 
 productController.getProducts = async (req, res, next) => {
+  const pageLimit = 2;
+  const currentPage = req.query && req.query.page ? Number(req.query.page) : 1;
+  let data = {
+    totalPages: 1,
+    currentPage: currentPage,
+    pageLimit: pageLimit,
+    products: [],
+  };
   const filterQuery = productService.buildQuery(req);
 
-  console.log(filterQuery);
+  const query = {
+    where: filterQuery,
+    limit: pageLimit,
+    offset: pageLimit * (currentPage - 1),
+  };
 
-  const data = await productService.findAll(filterQuery);
+  const products = await productService.findAll(query);
+  const total = await productService.count(filterQuery);
+  const from = (currentPage - 1) * pageLimit + 1;
+
+  data.products = products;
+  data.totalRows = total;
+  data.totalPages = Math.ceil(total / pageLimit);
+  data.from = from;
+  data.to = from + (products.length - 1);
+
   return res.status(200).json(data);
 };
 
