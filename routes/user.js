@@ -10,6 +10,6 @@ userRouter.get("/me", verifyLogin, userController.me);
 userRouter.patch("/me", verifyLogin, profileUpdateValidator, checkErrors, wrapAsync(userController.updateProfile));
 userRouter.get("/my/wish-list", verifyLogin, wrapAsync(userController.getMyWishList));
 userRouter.delete("/my/wish-list/:id", verifyLogin, wrapAsync(userController.deleteMyWish));
-userRouter.post("/new-wish", verifyLogin, wrapAsync(userController.addProductToWishList1));
+userRouter.post("/new-wish", verifyLogin, wrapAsync(userController.addProductToWishList));
 
 module.exports = userRouter;
