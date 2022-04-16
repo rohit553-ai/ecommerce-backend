@@ -74,10 +74,8 @@ userController.deleteMyWish = async(req, res, next)=>{
     return next(new CustomError("Can't find the product in wishlist", 404))
   }
   await wishListService.delete({
-    where: {
       userId,
       id: wishListId
-    }
   })
   return res.status(200).json({
     status:"success",
