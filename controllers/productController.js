@@ -12,7 +12,7 @@ productController.getProducts = async (req, res, next) => {
   if(req.query.category && req.query.subCategory){
     const subCategory = await subCategoryService.findOne({
       id: req.query.subCategory,
-      categoryId: req.query.categoryId
+      categoryId: req.query.category
     })
     if(!subCategory){
       return next(new CustomError("Category and subcategory doesn't belong to each other", 404))
