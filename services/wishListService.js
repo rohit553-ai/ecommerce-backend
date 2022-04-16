@@ -22,4 +22,10 @@ wishListService.findOne = async(query)=>{
   })
 }
 
+wishListService.delete = async(query)=>{
+  return await WishList.destroy({
+    where: query
+  })
+}
+
 module.exports =wishListService;

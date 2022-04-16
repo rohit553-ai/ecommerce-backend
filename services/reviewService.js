@@ -1,10 +1,17 @@
-const { Review } = require("../models");
+const { Review, User } = require("../models");
 
 let reviewService = {};
 
 reviewService.findAll = async(query)=>{
   return await Review.findAll({
-    where: query
+    where: query.where,
+    limit: query.limit,
+    offset: query.offset,
+    include:{
+      model: User,
+      as: "user",
+      attributes:["id", "firstName", "lastName", "email"]
+    }
   });
 }
 

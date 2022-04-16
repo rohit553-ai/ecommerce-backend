@@ -6,31 +6,48 @@ const path = require("path");
 let productController = {};
 
 productController.getProducts = async (req, res, next) => {
-  const pageLimit = 2;
+  const pageLimit = req.query && req.query.limit? Number(req.query.limit) : null;
   const currentPage = req.query && req.query.page ? Number(req.query.page) : 1;
+
+  if(req.query.category && req.query.subCategory){
+    const subCategory = await subCategoryService.findOne({
+      id: req.query.subCategory,
+      categoryId: req.query.categoryId
+    })
+    if(!subCategory){
+      return next(new CustomError("Category and subcategory doesn't belong to each other", 404))
+    }
+  }
+
   let data = {
     totalPages: 1,
     currentPage: currentPage,
-    pageLimit: pageLimit,
     products: [],
   };
   const filterQuery = productService.buildQuery(req);
 
   const query = {
-    where: filterQuery,
-    limit: pageLimit,
-    offset: pageLimit * (currentPage - 1),
-  };
+    where: filterQuery, 
+  }
+
+  if(pageLimit){
+    data.pageLimit = pageLimit
+    query.limit= pageLimit;
+    query.offset= pageLimit * (currentPage - 1);
+  }
 
   const products = await productService.findAll(query);
   const total = await productService.count(filterQuery);
-  const from = (currentPage - 1) * pageLimit + 1;
-
+  
   data.products = products;
   data.totalRows = total;
-  data.totalPages = Math.ceil(total / pageLimit);
-  data.from = from;
-  data.to = from + (products.length - 1);
+  
+  if(pageLimit){
+    const from = (currentPage - 1) * pageLimit + 1;
+    data.totalPages = Math.ceil(total / pageLimit);
+    data.from = from;
+    data.to = from + (products.length - 1);
+  }
 
   return res.status(200).json(data);
 };

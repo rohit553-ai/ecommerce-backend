@@ -40,6 +40,9 @@ productService.buildQuery = (req)=>{
   if(query.category){
     filter.categoryId = query.category;
   }
+  if(query.subCategory){
+    filter.subCategoryId = query.subCategory;
+  }
   if(query.minPrice){
     filter.price = {
       [Op.gte] : parseInt(query.minPrice.trim())

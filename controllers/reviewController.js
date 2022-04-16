@@ -30,8 +30,33 @@ reviewController.newReview = async(req, res, next)=>{
 }
 
 reviewController.getProductsReview = async(req, res, next)=>{
-  const reviews = await reviewService.findAll({
+  const pageLimit = 5;
+  const currentPage = req.query && req.query.page ? Number(req.query.page) : 1;
+
+  const product = await productService.findOne({id: req.params.id});
+  if(!product){
+    return next(new CustomError("Product doesn't exist", 404))
+  }
+
+  let data = {
+    totalPages: 1,
+    currentPage: currentPage,
+    pageLimit: pageLimit,
+    product,
+    reviews:[]
+  };
+  const filterQuery = {
     productId: req.params.id
-  });
-  return res.status(200).json(reviews);
+  };
+
+  const query = {
+    where: filterQuery,
+    limit: pageLimit,
+    offset: pageLimit * (currentPage - 1),
+  };
+  const reviews = await reviewService.findAll(query);
+  data.reviews = reviews;
+  return res.status(200).json(data);
 }
+
+module.exports = reviewController;

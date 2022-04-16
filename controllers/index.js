@@ -3,6 +3,7 @@ module.exports =
   categoryController: require("./categoryController"),
   productController: require("./productController"),
   userController: require("./userController"),
-  subCategoryController: require("./subCategoryController")
+  subCategoryController: require("./subCategoryController"),
+  reviewController: require("./reviewController")
 }
   

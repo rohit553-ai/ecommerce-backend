@@ -61,4 +61,28 @@ userController.getMyWishList = async(req, res, next)=>{
   return res.status(200).json(myWishList);
 }
 
+userController.deleteMyWish = async(req, res, next)=>{
+  const userId = req.user.id;
+  const wishListId = req.params.id;
+
+  const wish = await wishListService.findOne({
+    userId,
+    id: wishListId
+  })
+
+  if(!wish){
+    return next(new CustomError("Can't find the product in wishlist", 404))
+  }
+  await wishListService.delete({
+    where: {
+      userId,
+      id: wishListId
+    }
+  })
+  return res.status(200).json({
+    status:"success",
+    data: null
+  })
+}
+
 module.exports = userController;
