@@ -73,4 +73,42 @@ reviewController.getTopReviews = async(req, res, next)=>{
   return res.status(200).json(ratings);
 }
 
+reviewController.update = async(req, res, next)=>{
+  let query = {
+    id: req.prams.id,
+    userId: req.user.id
+  }
+  const review = await reviewService.findOne(query);
+
+  if(!review){
+    return next(new CustomError("Cannot find the review", 404))
+  }
+
+  let {reviewMessage, ratings} =req.body;
+
+  reviewMessage? review.reviewMessage = reviewMessage : null;
+  ratings? review.ratings = ratings: null;
+
+  const result = await review.save();
+  return res.status(200).json(result);
+}
+
+reviewController.delete = async(req, res, next)=>{
+  let query = {
+    id: req.prams.id,
+    userId: req.user.id
+  }
+  const review = await reviewService.findOne(query);
+
+  if(!review){
+    return next(new CustomError("Cannot find the review", 404))
+  }
+
+  await reviewService.delete(query);
+  return res.status(200).json({
+    status:"success",
+    data: null
+  })
+}
+
 module.exports = reviewController;
