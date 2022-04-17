@@ -5,5 +5,6 @@ module.exports = Object.assign(
   require("./categoryValidator"),
   require("./productValidator"),
   require("./subCategoryValidator"),
-  require("./userValidator")
+  require("./userValidator"),
+  require("./reviewValidator")
 )

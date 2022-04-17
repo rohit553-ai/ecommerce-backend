@@ -1,4 +1,4 @@
-const {Product, Category} = require("../models");
+const {Product, Category, SubCategory} = require("../models");
 const {Op} = require("sequelize")
 
 let productService = {};
@@ -6,6 +6,16 @@ let productService = {};
 productService.findAll = async(query)=>{
   return await Product.findAll({
     where: query.where,
+    include:{
+      model: Category,
+      as:"category",
+      attributes: ["id", "name"]
+    },
+    include:{
+      model: SubCategory,
+      as:"subCategory",
+      attributes: ["id", "name"]
+    },
     limit: query.limit,
     offset: query.offset,
     order: query.sort

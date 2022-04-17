@@ -7,5 +7,6 @@ router.use("/categories", require("./category"));
 router.use("/products", require("./product"));
 router.use("/users", require("./user"));
 router.use("/sub-categories", require("./subCategory"));
+router.use("/reviews", require("./review"))
 
 module.exports = router;

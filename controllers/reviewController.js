@@ -4,6 +4,10 @@ const {CustomError} = require("../helpers")
 let reviewController = {};
 
 reviewController.newReview = async(req, res, next)=>{
+  if(!req.body.reviewMessage && !req.body.ratings){
+    return next(new CustomError("Either ratings or review message is required"));
+  }
+
   let reviewData = {
     reviewMessage: req.body.reviewMessage,
     ratings: req.body.ratings,
@@ -37,12 +41,13 @@ reviewController.getProductsReview = async(req, res, next)=>{
   if(!product){
     return next(new CustomError("Product doesn't exist", 404))
   }
-
+  const averageRating = Number((await reviewService.getAverageRatings(product.id))).toFixed(1);
   let data = {
     totalPages: 1,
     currentPage: currentPage,
     pageLimit: pageLimit,
     product,
+    averageRating,
     reviews:[]
   };
   const filterQuery = {
@@ -57,6 +62,15 @@ reviewController.getProductsReview = async(req, res, next)=>{
   const reviews = await reviewService.findAll(query);
   data.reviews = reviews;
   return res.status(200).json(data);
+}
+
+reviewController.getTopReviews = async(req, res, next)=>{
+  let query = {};
+  query.limit = 5;
+  query.sort = [["ratings", "DESC"]];
+
+  const ratings = await reviewService.findAll(query);
+  return res.status(200).json(ratings);
 }
 
 module.exports = reviewController;
