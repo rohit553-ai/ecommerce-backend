@@ -6,6 +6,8 @@ module.exports = {
   productService: require("./productService"),
   wishListService: require("./wishListService"),
   subCategoryService: require("./subCategoryService"),
-  reviewService: require("./reviewService")
+  reviewService: require("./reviewService"),
+  orderService: require("./orderService"),
+  orderDetailService: require("./orderDetailService")
   // reviewService: require("./reviewService")
 };

@@ -81,6 +81,7 @@ reviewController.update = async(req, res, next)=>{
   const review = await reviewService.findOne(query);
 
   if(!review){
+   
     return next(new CustomError("Cannot find the review", 404))
   }
 
@@ -112,3 +113,10 @@ reviewController.delete = async(req, res, next)=>{
 }
 
 module.exports = reviewController;
+
+//
+//Order, OrderDetails, Billing
+
+//Order => id, status => [pending, onProgress, delivered, cancelled], subTotal, estimatedTax, estimatedTotal, userId, paymentStatus, paymentMethod
+
+//OrderDetails => id, orderId, product, quantity

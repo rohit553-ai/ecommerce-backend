@@ -83,4 +83,11 @@ productService.count = async(query)=>{
   })
 }
 
+productService.updateWithTransaction = async(query, data, t)=>{
+  return await Product.update(data, {
+    where: query,
+    transaction: t
+  })
+}
+
 module.exports = productService;
