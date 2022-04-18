@@ -1,6 +1,7 @@
 const {orderService, orderDetailService, productService} = require("../services");
 const {sequelize} = require("../models");
 const {CustomError} = require("../helpers");
+const order = require("../models/order");
 
 let orderController = {};
 
@@ -49,6 +50,46 @@ orderController.newOrder = async(req, res, next)=>{
   }else{
     return next(new CustomError("Something went wrong when creating an order please try again", 400))
   }
+}
+
+orderController.getAllOrders = async(req, res, next)=>{
+  let query = {};
+  const filter = orderService.buildFilterQuery(req);
+  query.where = filter;
+  const orders = await orderService.findAll(query);
+
+  return res.status(200).json(orders);
+}
+
+orderController.getSingleOrder = async(req, res, next)=>{
+  const order = await orderService.findOne({
+    id: req.params.id
+  });
+  
+  if(!order){
+    return next(new CustomError("Order doesn't exist, Please try again!", 404))
+  }
+
+  return res.status(200).json(order);
+}
+
+orderController.updateOrder = async(req, res, next)=>{
+  const {status, paymentStatus} = req.body;
+
+  let order = await orderService.findOne({
+    id: req.params.id
+  });
+  
+  if(!order){
+    return next(new CustomError("Order doesn't exist, Please try again!", 404))
+  }
+
+  status? order.status = status: null;
+  paymentStatus? order.paymentStatus = paymentStatus:null;
+
+  order = await order.save();
+
+  return res.status(200).json(order);
 }
 
 module.exports = orderController;

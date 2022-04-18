@@ -46,7 +46,7 @@ userController.addProductToWishList = async(req, res, next) => {
   });
 
   if(checkWishList){
-    return next(new CustomError("Product already added to user's checklist", 400))
+    return next(new CustomError("Product already added to user's wishlist", 400))
   }
   const newWish = await wishListService.newWish({
     userId,

@@ -40,6 +40,24 @@ let validateNewOrder = [
   check("deliveryAddress", "Invalid value for delivery address").isLength({min:1}).withMessage("Delivery address is required").isLength({max:254}).withMessage("Delivery address should be less than 254 characters").isString()
 ];
 
+let validateUpdateOrder = [
+  check("status").optional().isLength({min:1, max:15}).withMessage("Status should be between 1 to 15 char").custom(value=>{
+    let acceptedStatus = ["pending", "onProgress", "delivered", "cancelled"]
+    if(acceptedStatus.indexOf(value)<=-1){
+      return Promise.reject("Invalid value for status")
+    }
+    return Promise.resolve();
+  }),
+  check("paymentStatus").optional().isLength({min:1, max:15}).withMessage("Payment Status should be between 1 to 15 char").custom(value=>{
+    let acceptedStatus = ["paid", "unpaid"]
+    if(acceptedStatus.indexOf(value)<=-1){
+      return Promise.reject("Invalid value for payment status")
+    }
+    return Promise.resolve();
+  })
+]
+
 module.exports = {
-  validateNewOrder
+  validateNewOrder,
+  validateUpdateOrder
 }

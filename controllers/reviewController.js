@@ -25,7 +25,7 @@ reviewController.newReview = async(req, res, next)=>{
   })
 
   if(userReview){
-    return next(new CustomError("Review for this product already exist."))
+    return next(new CustomError("You have already provided a review for this product", 400))
   }
   reviewData.productId = product.id;
 
@@ -34,7 +34,7 @@ reviewController.newReview = async(req, res, next)=>{
 }
 
 reviewController.getProductsReview = async(req, res, next)=>{
-  const pageLimit = 5;
+  const pageLimit = 10;
   const currentPage = req.query && req.query.page ? Number(req.query.page) : 1;
 
   const product = await productService.findOne({id: req.params.id});
