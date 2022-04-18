@@ -10,6 +10,8 @@ orderService.create = async(data, tran)=>{
 orderService.findAll = async(query)=>{
   const orders = await Order.findAll({
     where: query.where,
+    limit: query.limit,
+    offset: query.offset,
     include:{
       model:User,
       as:"user",
@@ -31,6 +33,7 @@ orderService.buildFilterQuery = (req)=>{
   if(query.paymentMethod){
     filter.queryMethod = query.paymentMethod
   }
+  return filter;
 }
 
 orderService.findOne = async(query)=>{
@@ -51,6 +54,12 @@ orderService.findOne = async(query)=>{
         attributes: ["id", "firstName", "lastName", "email"]
       }
     ]
+  })
+}
+
+orderService.count = async(query)=>{
+  return await Order.count({
+    where: query
   })
 }
 

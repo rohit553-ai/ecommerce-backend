@@ -9,6 +9,6 @@ const orderRouter = express.Router();
 orderRouter.get("/", verifyLogin, wrapAsync(orderController.getAllOrders));
 orderRouter.get("/:id", verifyLogin, wrapAsync(orderController.getSingleOrder));
 orderRouter.post("/", verifyLogin, validateNewOrder, checkErrors, wrapAsync(orderController.newOrder));
-orderRouter.get("/:id", verifyLogin, validateUpdateOrder, checkErrors, wrapAsync(orderController.updateOrder));
+orderRouter.patch("/:id", verifyLogin, validateUpdateOrder, checkErrors, wrapAsync(orderController.updateOrder));
 
 module.exports = orderRouter;

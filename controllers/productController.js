@@ -167,9 +167,19 @@ productController.deleteProduct = async (req, res, next) => {
 };
 
 productController.latestProducts = async(req, res, next)=>{
+  const limit = req.query && req.query.limit ? Number(req.query.limit):5;
   const product = await productService.findAll({
-    limit: 5,
+    limit: limit,
     sort: [['createdAt', 'DESC']]
+  });
+  return res.status(200).json(product);
+}
+
+productController.bestSellers = async(req, res, next)=>{
+  const limit = req.query && req.query.limit ? Number(req.query.limit):5;
+  const product = await productService.findAll({
+    limit: Number(limit),
+    sort: [['unitsSold', 'DESC']]
   });
   return res.status(200).json(product);
 }

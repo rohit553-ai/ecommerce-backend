@@ -8,6 +8,7 @@ const {upload, resizeImage} = require("../middlewares");
 const productRouter = express.Router();
 
 productRouter.get("/", wrapAsync(productController.getProducts));
+productRouter.get("/best-sellers", wrapAsync(productController.bestSellers));
 productRouter.get("/latest", wrapAsync(productController.latestProducts));
 productRouter.get("/:id", wrapAsync(productController.getSingleProduct));
 productRouter.get("/:id/reviews", wrapAsync(reviewController.getProductsReview));

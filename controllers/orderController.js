@@ -53,12 +53,39 @@ orderController.newOrder = async(req, res, next)=>{
 }
 
 orderController.getAllOrders = async(req, res, next)=>{
+  const pageLimit = req.query && req.query.limit? Number(req.query.limit) : null;
+  const currentPage = req.query && req.query.page ? Number(req.query.page) : 1;
+
+  let data = {
+    totalPages: 1,
+    currentPage: currentPage,
+    orders: [],
+  };
+
   let query = {};
   const filter = orderService.buildFilterQuery(req);
   query.where = filter;
-  const orders = await orderService.findAll(query);
 
-  return res.status(200).json(orders);
+  if(pageLimit){
+    data.pageLimit = pageLimit
+    query.limit= pageLimit;
+    query.offset= pageLimit * (currentPage - 1);
+  }
+
+  const orders = await orderService.findAll(query);
+  const total = await orderService.count(filter);
+
+  data.orders = orders;
+  data.totalRows = total;
+  
+  if(pageLimit){
+    const from = (currentPage - 1) * pageLimit + 1;
+    data.totalPages = Math.ceil(total / pageLimit);
+    data.from = from;
+    data.to = from + (orders.length - 1);
+  }
+
+  return res.status(200).json(data);
 }
 
 orderController.getSingleOrder = async(req, res, next)=>{
