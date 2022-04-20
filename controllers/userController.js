@@ -8,12 +8,26 @@ userController.me = async(req, res, next)=>{
   return res.status(200).json(req.user);
 }
 
+userController.getAllUsers = async(req, res, next)=>{
+  const users = await userService.findAll();
+  return res.status(200).json(users);
+}
+
+userController.getSingleUser = async(req, res, next)=>{
+  const user = await userService.findOne({
+    id: req.params.id
+  })
+  if(!user){
+    return next(new CustomError("User not found", 404))
+  }
+  return res.status(200).json(user);
+}
+
 userController.updateProfile = async(req, res, next)=>{
   const user = req.user;
   
   const {firstName, lastName, phone} = req.body;
 
-  console.log(firstName, lastName, phone)
   firstName? user.firstName = firstName: null;
   lastName? user.lastName = lastName : null;
 

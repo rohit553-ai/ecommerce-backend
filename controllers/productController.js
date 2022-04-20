@@ -143,8 +143,6 @@ productController.updateProduct = async (req, res, next) => {
     }
     product.subCategoryId = subCategoryId
   }
-
-
   product = await product.save();
 
   return res.status(200).json(product);
@@ -172,6 +170,7 @@ productController.latestProducts = async(req, res, next)=>{
     limit: limit,
     sort: [['createdAt', 'DESC']]
   });
+  console.log(product)
   return res.status(200).json(product);
 }
 
@@ -180,6 +179,17 @@ productController.bestSellers = async(req, res, next)=>{
   const product = await productService.findAll({
     limit: Number(limit),
     sort: [['unitsSold', 'DESC']]
+  });
+  return res.status(200).json(product);
+}
+
+productController.backInStock = async(req, res, next)=>{
+  const limit = req.query && req.query.limit ? Number(req.query.limit):5;
+  const product = await productService.findAll({
+    where:{
+      tag:"back-in-stock"
+    },
+    limit: Number(limit),
   });
   return res.status(200).json(product);
 }

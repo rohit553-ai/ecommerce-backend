@@ -1,7 +1,6 @@
 const {orderService, orderDetailService, productService} = require("../services");
 const {sequelize} = require("../models");
 const {CustomError} = require("../helpers");
-const order = require("../models/order");
 
 let orderController = {};
 
@@ -117,6 +116,13 @@ orderController.updateOrder = async(req, res, next)=>{
   order = await order.save();
 
   return res.status(200).json(order);
+}
+
+orderController.getMyOrders = async(req, res, next)=>{
+  const userId= req.user.id;
+
+  const orders = await orderService.getUserOrders(userId);
+  return res.status(200).json(orders);
 }
 
 module.exports = orderController;

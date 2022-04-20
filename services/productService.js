@@ -74,6 +74,9 @@ productService.buildQuery = (req)=>{
       [Op.like]: `%${query.name.trim()}%`
     }
   }
+  if(query.tag){
+    filter.tag = query.tag;
+  }
   return filter;
 }
 

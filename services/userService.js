@@ -2,9 +2,19 @@ const {User, WishList, Product} = require("../models");
 
 let userService = {};
 
+userService.findAll = async()=>{
+  const users = await User.findAll({
+    attributes:["id", "firstName", "lastName", "email", "phone", "role", "createdAt"]
+  });
+  return users;
+}
+
 userService.findOne = async(query)=>{
   const user = await User.findOne({
-    where: query
+    where: query,
+    attributes:{
+      exclude: ['password']
+    }
   })
   return user;
 }

@@ -57,6 +57,25 @@ orderService.findOne = async(query)=>{
   })
 }
 
+orderService.getUserOrders = async(userId)=>{
+  return await Order.findAll({
+    where:{
+      userId
+    },
+    include:[{
+      model: Product,
+      as:"product",
+      attributes:["id", "name", "picture"]
+    },
+    {
+      model:User,
+      as:"user",
+      attributes: ["id", "firstName", "lastName", "email"]
+    }
+  ]
+  })
+}
+
 orderService.count = async(query)=>{
   return await Order.count({
     where: query
