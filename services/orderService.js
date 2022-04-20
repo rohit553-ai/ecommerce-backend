@@ -63,9 +63,14 @@ orderService.getUserOrders = async(userId)=>{
       userId
     },
     include:[{
-      model: Product,
-      as:"product",
-      attributes:["id", "name", "picture"]
+      model:OrderDetail,
+      as:"orderDetails",
+      attributes: ["quantity"],
+      include:{
+        model: Product,
+        as:"product",
+        attributes:["id", "name", "picture"]
+      }
     },
     {
       model:User,
