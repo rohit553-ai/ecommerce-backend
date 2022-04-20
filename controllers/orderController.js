@@ -110,7 +110,12 @@ orderController.updateOrder = async(req, res, next)=>{
     return next(new CustomError("Order doesn't exist, Please try again!", 404))
   }
 
-  status? order.status = status: null;
+  if(status){
+    order.status = status;
+    if(status==="delivered"){
+      order.paymentStatus = "paid";
+    }
+  }
   paymentStatus? order.paymentStatus = paymentStatus:null;
 
   order = await order.save();
@@ -123,6 +128,27 @@ orderController.getMyOrders = async(req, res, next)=>{
 
   const orders = await orderService.getUserOrders(userId);
   return res.status(200).json(orders);
+}
+
+orderController.cancelOrder = async(req, res, next)=>{
+  let order = await orderService.findOne({
+    id:req.params.id,
+    userId: req.user.id
+  });
+
+  if(!order){
+    return next(new CustomError("The order doesn't exist.", 404));
+  }
+  console.log(order.status)
+  if(order.status === "cancelled"){
+    return next(new CustomError("The order is already cancelled", 400));
+  }
+  if(order.status !== "pending"){
+    return next(new CustomError("The order is already in progress and cannot be cancelled now", 400));
+  }
+  order.status = "cancelled";
+  order = await order.save();
+  return res.status(200).json(order);
 }
 
 module.exports = orderController;
