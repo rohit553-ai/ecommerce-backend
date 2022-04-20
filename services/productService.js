@@ -26,11 +26,15 @@ productService.findOne = async(query)=>{
   return await Product.findOne({
     where: query,
     attributes:["id", "name", "description", "picture", "quantity", "unitsSold", "price", "tag"],
-    include:{
+    include:[{
       model : Category,
       as: "category",
       attributes: ["id", "name"]
-    }
+    },{
+      model : SubCategory,
+      as: "subCategory",
+      attributes: ["id", "name"]
+    }]
   });
 }
 
