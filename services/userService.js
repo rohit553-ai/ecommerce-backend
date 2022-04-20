@@ -11,10 +11,7 @@ userService.findAll = async()=>{
 
 userService.findOne = async(query)=>{
   const user = await User.findOne({
-    where: query,
-    attributes:{
-      exclude: ['password']
-    }
+    where: query
   })
   return user;
 }

@@ -25,6 +25,7 @@ module.exports.verifyLogin = async (req, res, next)=>{
     req.user = freshUser;
     return next();
   }catch(err){
+    console.log(err);
     return res.status(500).json({
       status:"error",
       message:"Failed to authenticate"

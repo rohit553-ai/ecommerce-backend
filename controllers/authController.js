@@ -10,7 +10,7 @@ authController.login = async(req, res, next)=>{
   if(!user){
     return next(new CustomError("Email or password doesn't match", 400))
   }
-
+  
   let passwordMatches = bcrypt.compareSync(req.body.password, user.password);
   if(!passwordMatches){
     return next(new CustomError("Email or password doesn't match", 400))
