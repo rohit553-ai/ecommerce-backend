@@ -8,6 +8,7 @@ module.exports = {
   subCategoryService: require("./subCategoryService"),
   reviewService: require("./reviewService"),
   orderService: require("./orderService"),
-  orderDetailService: require("./orderDetailService")
+  orderDetailService: require("./orderDetailService"),
+  khaltiService: require("./khaltiService")
   // reviewService: require("./reviewService")
 };

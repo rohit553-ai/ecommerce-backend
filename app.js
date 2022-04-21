@@ -11,6 +11,7 @@ const {CustomError} = require("./helpers")
 
 require("dotenv").config();
 const db = require("./models");
+const { khaltiService } = require("./services");
 
 app.use(express.json());
 
@@ -38,6 +39,13 @@ app.get("/", (req, res, next)=>{
   return res.status(200).json("Hello from FYP")
 })
 app.use("/api", require("./routes"));
+
+app.get("/hehe", async(req, res, next)=>{
+  khaltiService.verifyTransaction({
+    token:"asdasdas",
+    amount:1000
+  })
+})
 
 app.use("*", (req, res, next)=>{
   return next(new CustomError(`${req.originalUrl} not found`, 404))

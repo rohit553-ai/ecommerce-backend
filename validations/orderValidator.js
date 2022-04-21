@@ -30,12 +30,7 @@ let validateNewOrder = [
     return Promise.resolve();
   }),
   check("subTotal").isLength({min:1}).withMessage("Sub total is required").isNumeric().withMessage("Invalid value for sub total"),
-  check("estimatedTax").isLength({min:1}).withMessage("Estimated tax is required").isNumeric().withMessage("Invalid value for estimated tax").custom(value=>{
-    if(value>100||value<0){
-      return Promise.reject("Are you stupid? Percentage must be betwwen 0 to 100!!")
-    }
-    return Promise.resolve();
-  }),
+  check("estimatedTax").isLength({min:1}).withMessage("Estimated tax is required").isNumeric().withMessage("Invalid value for estimated tax"),
   check("estimatedTotal").isLength({min:1}).withMessage("Estimated total is required").isNumeric().withMessage("Invalid value for estimated total"),
   check("deliveryAddress", "Invalid value for delivery address").isLength({min:1}).withMessage("Delivery address is required").isLength({max:254}).withMessage("Delivery address should be less than 254 characters").isString()
 ];
