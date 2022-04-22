@@ -1,5 +1,5 @@
 
-const {productService, wishListService, userService} = require("../services");
+const {productService, wishListService, userService, messageService} = require("../services");
 const {CustomError} = require("../helpers")
 
 let userController = {};
@@ -95,6 +95,23 @@ userController.deleteMyWish = async(req, res, next)=>{
     status:"success",
     data: null
   })
+}
+
+userController.sendMessages = async(req, res, next)=>{
+  const messageData = {
+    name: `${req.body.salutation} ${req.body.firstName} ${req.body.lastName}`,
+    phoneNumber: req.body.phone,
+    email: req.body.email,
+    country: req.body.country,
+    message: req.body.message
+  }
+  const message = await messageService.newMessage(messageData);
+  return res.status(200).json(message);
+}
+
+userController.getMessages = async(req, res, next)=>{
+  const messages = await messageService.findAll();
+  return res.status(200).json(messages);
 }
 
 module.exports = userController;

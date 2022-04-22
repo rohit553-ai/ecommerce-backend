@@ -9,6 +9,7 @@ module.exports = {
   reviewService: require("./reviewService"),
   orderService: require("./orderService"),
   orderDetailService: require("./orderDetailService"),
-  khaltiService: require("./khaltiService")
+  khaltiService: require("./khaltiService"),
+  messageService: require("./messageService")
   // reviewService: require("./reviewService")
 };

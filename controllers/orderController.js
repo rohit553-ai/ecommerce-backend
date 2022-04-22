@@ -59,7 +59,7 @@ orderController.orderWithKhalti = async(req, res, next)=>{
       estimatedTax,
       estimatedTotal,
       deliveryAddress,
-      paymentStaus:"paid",
+      paymentStatus:"paid",
       paymentMethod:"khalti",
       userId: req.user.id
     }, {transaction: t})

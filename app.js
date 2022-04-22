@@ -2,10 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const morgan = require("morgan");
 
 const app = express();
 
 app.use(cors());
+app.use(morgan("dev"))
 
 const {CustomError} = require("./helpers")
 
