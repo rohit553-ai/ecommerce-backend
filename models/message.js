@@ -33,24 +33,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    phoneNumber: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    country: {
-      type: DataTypes.STRING,
-    },
-    message: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-  }, {
-    sequelize,
-    modelName: 'Message',
-  });
+    {
+      sequelize,
+      modelName: "Message",
+    }
+  );
   return Message;
 };
